@@ -11,13 +11,16 @@
                 </a>
             </div>
 
-            <div class="center">
+            <div v-for="item in items" :key="item.id"  class="center">
                 <div class="col-10 card shadow-sm p-2 mb-3 bg-body rounded">
                     <div class="row">
                         <div class="col-12 col-md-8">
-                            <b>Name: </b>sdsdsa<br>
-                            <b>Last name: </b>sadsad<br>
-                            <b>Email: </b>sdas<br>
+                            <b>Name: </b>{{item.name}}
+                            <br>
+                            <b>Last name: </b>{{item.lastname}}
+                            <br>
+                            <b>Email: </b>{{item.email}}
+                            <br>
                             
                         </div>
                         <div class="col-12 col-md-4">
@@ -27,7 +30,7 @@
                                 data-bs-toggle="modal" data-bs-target="#exampleModal">
                                     <i class="fas fa-trash-alt"></i>
                                 </button>
-                                <button @click="editMode" type="button" class="col-12 col-md-3 btn btn-outline-primary mt-2 m-md-2"
+                                <button @click="editMode(item)" type="button" class="col-12 col-md-3 btn btn-outline-primary mt-2 m-md-2"
                                 data-bs-toggle="modal" data-bs-target="#exampleModal">
                                     <i class="fas fa-edit"></i>
                                 </button>
@@ -43,9 +46,8 @@
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 v-if="this.status === 'add'" class="modal-title" id="exampleModalLabel">New user</h5>
-                            <h5 v-else-if="status == 'edit'" class="modal-title" id="exampleModalLabel">Edit user</h5>
-                            <h5 v-else-if="status == 'delete'" class="modal-title" id="exampleModalLabel">Delete user</h5>
+                            <h5 class="modal-title" id="exampleModalLabel">{{title}}</h5>
+                            
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <!-- New and edit -->
@@ -100,8 +102,8 @@
                                 <button @click="edit" v-else-if="status == 'edit'" type="button" class="btn btn-success">Save changes</button>
                                 <button @click="deleteItem" v-else-if="status == 'delete'" type="button" class="btn btn-danger">Delete</button>   
                             </div>
-                            
                         </div>
+
                     </div>
                 </div>
             </div>
@@ -119,7 +121,9 @@ export default {
                 lastname:'',
                 email:''
             },
-            item:[],
+            title:"",
+            items:[],
+            errors:[],
             status: null,
             successful: Boolean
         }
@@ -127,39 +131,70 @@ export default {
     methods:{
         addMode(){
             this.status = 'add'
+            this.title = 'New user'
+            this.user = {} 
             this.successful = false
         },
-        editMode(){
+        editMode(editUser){
             this.status = 'edit'
+            this.title = 'Edit user'
+            this.user.name = editUser.name
+            this.user.lastname = editUser.lastname
+            this.user.email = editUser.email
             this.successful = false
         },
         deleteMode(){
             this.status = 'delete'
+            this.title = 'Delete user'
             this.successful = false
         },
         save(){
             try {
-                
-                this.successful = true
+                const res = await axio.post('user',this.user)
+                if(res.data){
+                    this.items.unshift(res.data)
+                    this.successful = true
+                    this.user = {} 
+                    this.errors=[]
+                } 
             } catch (error) {
-                
+                if(error.response.data){
+                    this.errors = error.response.data.errors
+                    console.log('Tus datos son invalidos')
+                } 
             }  
         },
         edit(){
             try {
-                
-                this.successful = true
+                const res = await axio.put('user',this.user)
+                if(res.data){
+                    this.items.unshift(res.data)
+                    this.successful = true
+                    this.user = {} 
+                    this.errors=[]
+                } 
             } catch (error) {
-                
-            }
+                if(error.response.data){
+                    this.errors = error.response.data.errors
+                    console.log('Tus datos son invalidos')
+                } 
+            }  
         },
         deleteItem(){
             try {
-                
-                this.successful = true
+                const res = await axio.delete('user',this.user)
+                if(res.data){
+                    this.items.unshift(res.data)
+                    this.successful = true
+                    this.user = {} 
+                    this.errors=[]
+                } 
             } catch (error) {
-                
-            }
+                if(error.response.data){
+                    this.errors = error.response.data.errors
+                    console.log('Tus datos son invalidos')
+                } 
+            }  
         }
     },
  

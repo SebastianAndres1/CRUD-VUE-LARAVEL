@@ -1957,6 +1957,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
@@ -1965,7 +1967,9 @@ __webpack_require__.r(__webpack_exports__);
         lastname: '',
         email: ''
       },
-      item: [],
+      title: "",
+      items: [],
+      errors: [],
       status: null,
       successful: Boolean
     };
@@ -1973,19 +1977,28 @@ __webpack_require__.r(__webpack_exports__);
   methods: {
     addMode: function addMode() {
       this.status = 'add';
+      this.title = 'New user';
+      this.user = {};
       this.successful = false;
     },
-    editMode: function editMode() {
+    editMode: function editMode(editUser) {
       this.status = 'edit';
+      this.title = 'Edit user';
+      this.user.name = editUser.name;
+      this.user.lastname = editUser.lastname;
+      this.user.email = editUser.email;
       this.successful = false;
     },
     deleteMode: function deleteMode() {
       this.status = 'delete';
+      this.title = 'Delete user';
       this.successful = false;
     },
     save: function save() {
       try {
+        this.items.unshift(this.user);
         this.successful = true;
+        this.user = {};
       } catch (error) {}
     },
     edit: function edit() {
@@ -19989,327 +20002,338 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "container-fluid" }, [
-    _c("div", { staticClass: "row" }, [
-      _vm._m(0),
-      _vm._v(" "),
-      _c("div", { staticClass: "center bg-success mb-4" }, [
-        _c(
-          "a",
-          {
-            staticClass: "btn btn-warning button",
-            attrs: {
-              "data-bs-toggle": "modal",
-              "data-bs-target": "#exampleModal"
+    _c(
+      "div",
+      { staticClass: "row" },
+      [
+        _vm._m(0),
+        _vm._v(" "),
+        _c("div", { staticClass: "center bg-success mb-4" }, [
+          _c(
+            "a",
+            {
+              staticClass: "btn btn-warning button",
+              attrs: {
+                "data-bs-toggle": "modal",
+                "data-bs-target": "#exampleModal"
+              },
+              on: { click: _vm.addMode }
             },
-            on: { click: _vm.addMode }
-          },
-          [
-            _c("i", { staticClass: "fas fa-plus-circle" }),
-            _vm._v(" "),
-            _c("b", [_vm._v("Create a new user")])
-          ]
-        )
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "center" }, [
+            [
+              _c("i", { staticClass: "fas fa-plus-circle" }),
+              _vm._v(" "),
+              _c("b", [_vm._v("Create a new user")])
+            ]
+          )
+        ]),
+        _vm._v(" "),
+        _vm._l(_vm.items, function(item) {
+          return _c("div", { key: item.id, staticClass: "center" }, [
+            _c(
+              "div",
+              { staticClass: "col-10 card shadow-sm p-2 mb-3 bg-body rounded" },
+              [
+                _c("div", { staticClass: "row" }, [
+                  _c("div", { staticClass: "col-12 col-md-8" }, [
+                    _c("b", [_vm._v("Name: ")]),
+                    _vm._v(_vm._s(item.name) + "\n                        "),
+                    _c("br"),
+                    _vm._v(" "),
+                    _c("b", [_vm._v("Last name: ")]),
+                    _vm._v(
+                      _vm._s(item.lastname) + "\n                        "
+                    ),
+                    _c("br"),
+                    _vm._v(" "),
+                    _c("b", [_vm._v("Email: ")]),
+                    _vm._v(_vm._s(item.email) + "\n                        "),
+                    _c("br")
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "col-12 col-md-4" }, [
+                    _c("b", [_vm._v("Action:")]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "row px-3" }, [
+                      _c(
+                        "button",
+                        {
+                          staticClass:
+                            "col-12 col-md-3 btn btn-outline-danger  m-md-2",
+                          attrs: {
+                            type: "button",
+                            "data-bs-toggle": "modal",
+                            "data-bs-target": "#exampleModal"
+                          },
+                          on: { click: _vm.deleteMode }
+                        },
+                        [_c("i", { staticClass: "fas fa-trash-alt" })]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "button",
+                        {
+                          staticClass:
+                            "col-12 col-md-3 btn btn-outline-primary mt-2 m-md-2",
+                          attrs: {
+                            type: "button",
+                            "data-bs-toggle": "modal",
+                            "data-bs-target": "#exampleModal"
+                          },
+                          on: {
+                            click: function($event) {
+                              return _vm.editMode(item)
+                            }
+                          }
+                        },
+                        [_c("i", { staticClass: "fas fa-edit" })]
+                      )
+                    ])
+                  ])
+                ])
+              ]
+            )
+          ])
+        }),
+        _vm._v(" "),
         _c(
           "div",
-          { staticClass: "col-10 card shadow-sm p-2 mb-3 bg-body rounded" },
+          {
+            staticClass: "modal fade",
+            attrs: {
+              id: "exampleModal",
+              tabindex: "-1",
+              "aria-labelledby": "exampleModalLabel",
+              "aria-hidden": "true"
+            }
+          },
           [
-            _c("div", { staticClass: "row" }, [
-              _vm._m(1),
-              _vm._v(" "),
-              _c("div", { staticClass: "col-12 col-md-4" }, [
-                _c("b", [_vm._v("Action:")]),
-                _vm._v(" "),
-                _c("div", { staticClass: "row px-3" }, [
+            _c("div", { staticClass: "modal-dialog" }, [
+              _c("div", { staticClass: "modal-content" }, [
+                _c("div", { staticClass: "modal-header" }, [
                   _c(
-                    "button",
+                    "h5",
                     {
-                      staticClass:
-                        "col-12 col-md-3 btn btn-outline-danger  m-md-2",
-                      attrs: {
-                        type: "button",
-                        "data-bs-toggle": "modal",
-                        "data-bs-target": "#exampleModal"
-                      },
-                      on: { click: _vm.deleteMode }
+                      staticClass: "modal-title",
+                      attrs: { id: "exampleModalLabel" }
                     },
-                    [_c("i", { staticClass: "fas fa-trash-alt" })]
+                    [_vm._v(_vm._s(_vm.title))]
                   ),
                   _vm._v(" "),
-                  _c(
-                    "button",
-                    {
-                      staticClass:
-                        "col-12 col-md-3 btn btn-outline-primary mt-2 m-md-2",
-                      attrs: {
-                        type: "button",
-                        "data-bs-toggle": "modal",
-                        "data-bs-target": "#exampleModal"
-                      },
-                      on: { click: _vm.editMode }
-                    },
-                    [_c("i", { staticClass: "fas fa-edit" })]
-                  )
+                  _c("button", {
+                    staticClass: "btn-close",
+                    attrs: {
+                      type: "button",
+                      "data-bs-dismiss": "modal",
+                      "aria-label": "Close"
+                    }
+                  })
+                ]),
+                _vm._v(" "),
+                !_vm.successful
+                  ? _c("div", { staticClass: "modal-body" }, [
+                      _vm.status == "add" || _vm.status == "edit"
+                        ? _c("div", [
+                            _c("div", { staticClass: "mb-3" }, [
+                              _c(
+                                "label",
+                                {
+                                  staticClass: "form-label",
+                                  attrs: { for: "exampleFormControlInput1" }
+                                },
+                                [_vm._v("Name")]
+                              ),
+                              _vm._v(" "),
+                              _c("input", {
+                                directives: [
+                                  {
+                                    name: "model",
+                                    rawName: "v-model",
+                                    value: _vm.user.name,
+                                    expression: "user.name"
+                                  }
+                                ],
+                                staticClass: "form-control",
+                                attrs: {
+                                  type: "text",
+                                  id: "name",
+                                  placeholder: "name..."
+                                },
+                                domProps: { value: _vm.user.name },
+                                on: {
+                                  input: function($event) {
+                                    if ($event.target.composing) {
+                                      return
+                                    }
+                                    _vm.$set(
+                                      _vm.user,
+                                      "name",
+                                      $event.target.value
+                                    )
+                                  }
+                                }
+                              })
+                            ]),
+                            _vm._v(" "),
+                            _c("div", { staticClass: "mb-3" }, [
+                              _c(
+                                "label",
+                                {
+                                  staticClass: "form-label",
+                                  attrs: { for: "exampleFormControlInput1" }
+                                },
+                                [_vm._v("Last Name")]
+                              ),
+                              _vm._v(" "),
+                              _c("input", {
+                                directives: [
+                                  {
+                                    name: "model",
+                                    rawName: "v-model",
+                                    value: _vm.user.lastname,
+                                    expression: "user.lastname"
+                                  }
+                                ],
+                                staticClass: "form-control",
+                                attrs: {
+                                  type: "text",
+                                  id: "lastname",
+                                  placeholder: "last name..."
+                                },
+                                domProps: { value: _vm.user.lastname },
+                                on: {
+                                  input: function($event) {
+                                    if ($event.target.composing) {
+                                      return
+                                    }
+                                    _vm.$set(
+                                      _vm.user,
+                                      "lastname",
+                                      $event.target.value
+                                    )
+                                  }
+                                }
+                              })
+                            ]),
+                            _vm._v(" "),
+                            _c("div", { staticClass: "mb-3" }, [
+                              _c(
+                                "label",
+                                {
+                                  staticClass: "form-label",
+                                  attrs: { for: "exampleFormControlInput1" }
+                                },
+                                [_vm._v("Email")]
+                              ),
+                              _vm._v(" "),
+                              _c("input", {
+                                directives: [
+                                  {
+                                    name: "model",
+                                    rawName: "v-model",
+                                    value: _vm.user.email,
+                                    expression: "user.email"
+                                  }
+                                ],
+                                staticClass: "form-control",
+                                attrs: {
+                                  type: "email",
+                                  id: "email",
+                                  placeholder: "name@example.com"
+                                },
+                                domProps: { value: _vm.user.email },
+                                on: {
+                                  input: function($event) {
+                                    if ($event.target.composing) {
+                                      return
+                                    }
+                                    _vm.$set(
+                                      _vm.user,
+                                      "email",
+                                      $event.target.value
+                                    )
+                                  }
+                                }
+                              })
+                            ])
+                          ])
+                        : _vm.status == "delete"
+                        ? _c("div", [_vm._m(1), _vm._v(" "), _vm._m(2)])
+                        : _vm._e()
+                    ])
+                  : _c("div", { staticClass: "modal-body" }, [
+                      _vm._m(3),
+                      _vm._v(" "),
+                      _vm._m(4)
+                    ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "modal-footer" }, [
+                  _vm.successful
+                    ? _c("div", [
+                        _c(
+                          "button",
+                          {
+                            staticClass: "btn btn-primary",
+                            attrs: {
+                              type: "button",
+                              "data-bs-dismiss": "modal"
+                            }
+                          },
+                          [_vm._v("Accept")]
+                        )
+                      ])
+                    : _c("div", [
+                        _c(
+                          "button",
+                          {
+                            staticClass: "btn btn-primary",
+                            attrs: {
+                              type: "button",
+                              "data-bs-dismiss": "modal"
+                            }
+                          },
+                          [_vm._v("Cancel")]
+                        ),
+                        _vm._v(" "),
+                        _vm.status == "add"
+                          ? _c(
+                              "button",
+                              {
+                                staticClass: "btn btn-success",
+                                attrs: { type: "button" },
+                                on: { click: _vm.save }
+                              },
+                              [_vm._v("Record")]
+                            )
+                          : _vm.status == "edit"
+                          ? _c(
+                              "button",
+                              {
+                                staticClass: "btn btn-success",
+                                attrs: { type: "button" },
+                                on: { click: _vm.edit }
+                              },
+                              [_vm._v("Save changes")]
+                            )
+                          : _vm.status == "delete"
+                          ? _c(
+                              "button",
+                              {
+                                staticClass: "btn btn-danger",
+                                attrs: { type: "button" },
+                                on: { click: _vm.deleteItem }
+                              },
+                              [_vm._v("Delete")]
+                            )
+                          : _vm._e()
+                      ])
                 ])
               ])
             ])
           ]
         )
-      ]),
-      _vm._v(" "),
-      _c(
-        "div",
-        {
-          staticClass: "modal fade",
-          attrs: {
-            id: "exampleModal",
-            tabindex: "-1",
-            "aria-labelledby": "exampleModalLabel",
-            "aria-hidden": "true"
-          }
-        },
-        [
-          _c("div", { staticClass: "modal-dialog" }, [
-            _c("div", { staticClass: "modal-content" }, [
-              _c("div", { staticClass: "modal-header" }, [
-                this.status === "add"
-                  ? _c(
-                      "h5",
-                      {
-                        staticClass: "modal-title",
-                        attrs: { id: "exampleModalLabel" }
-                      },
-                      [_vm._v("New user")]
-                    )
-                  : _vm.status == "edit"
-                  ? _c(
-                      "h5",
-                      {
-                        staticClass: "modal-title",
-                        attrs: { id: "exampleModalLabel" }
-                      },
-                      [_vm._v("Edit user")]
-                    )
-                  : _vm.status == "delete"
-                  ? _c(
-                      "h5",
-                      {
-                        staticClass: "modal-title",
-                        attrs: { id: "exampleModalLabel" }
-                      },
-                      [_vm._v("Delete user")]
-                    )
-                  : _vm._e(),
-                _vm._v(" "),
-                _c("button", {
-                  staticClass: "btn-close",
-                  attrs: {
-                    type: "button",
-                    "data-bs-dismiss": "modal",
-                    "aria-label": "Close"
-                  }
-                })
-              ]),
-              _vm._v(" "),
-              !_vm.successful
-                ? _c("div", { staticClass: "modal-body" }, [
-                    _vm.status == "add" || _vm.status == "edit"
-                      ? _c("div", [
-                          _c("div", { staticClass: "mb-3" }, [
-                            _c(
-                              "label",
-                              {
-                                staticClass: "form-label",
-                                attrs: { for: "exampleFormControlInput1" }
-                              },
-                              [_vm._v("Name")]
-                            ),
-                            _vm._v(" "),
-                            _c("input", {
-                              directives: [
-                                {
-                                  name: "model",
-                                  rawName: "v-model",
-                                  value: _vm.user.name,
-                                  expression: "user.name"
-                                }
-                              ],
-                              staticClass: "form-control",
-                              attrs: {
-                                type: "text",
-                                id: "name",
-                                placeholder: "name..."
-                              },
-                              domProps: { value: _vm.user.name },
-                              on: {
-                                input: function($event) {
-                                  if ($event.target.composing) {
-                                    return
-                                  }
-                                  _vm.$set(
-                                    _vm.user,
-                                    "name",
-                                    $event.target.value
-                                  )
-                                }
-                              }
-                            })
-                          ]),
-                          _vm._v(" "),
-                          _c("div", { staticClass: "mb-3" }, [
-                            _c(
-                              "label",
-                              {
-                                staticClass: "form-label",
-                                attrs: { for: "exampleFormControlInput1" }
-                              },
-                              [_vm._v("Last Name")]
-                            ),
-                            _vm._v(" "),
-                            _c("input", {
-                              directives: [
-                                {
-                                  name: "model",
-                                  rawName: "v-model",
-                                  value: _vm.user.lastname,
-                                  expression: "user.lastname"
-                                }
-                              ],
-                              staticClass: "form-control",
-                              attrs: {
-                                type: "text",
-                                id: "lastname",
-                                placeholder: "last name..."
-                              },
-                              domProps: { value: _vm.user.lastname },
-                              on: {
-                                input: function($event) {
-                                  if ($event.target.composing) {
-                                    return
-                                  }
-                                  _vm.$set(
-                                    _vm.user,
-                                    "lastname",
-                                    $event.target.value
-                                  )
-                                }
-                              }
-                            })
-                          ]),
-                          _vm._v(" "),
-                          _c("div", { staticClass: "mb-3" }, [
-                            _c(
-                              "label",
-                              {
-                                staticClass: "form-label",
-                                attrs: { for: "exampleFormControlInput1" }
-                              },
-                              [_vm._v("Email")]
-                            ),
-                            _vm._v(" "),
-                            _c("input", {
-                              directives: [
-                                {
-                                  name: "model",
-                                  rawName: "v-model",
-                                  value: _vm.user.email,
-                                  expression: "user.email"
-                                }
-                              ],
-                              staticClass: "form-control",
-                              attrs: {
-                                type: "email",
-                                id: "email",
-                                placeholder: "name@example.com"
-                              },
-                              domProps: { value: _vm.user.email },
-                              on: {
-                                input: function($event) {
-                                  if ($event.target.composing) {
-                                    return
-                                  }
-                                  _vm.$set(
-                                    _vm.user,
-                                    "email",
-                                    $event.target.value
-                                  )
-                                }
-                              }
-                            })
-                          ])
-                        ])
-                      : _vm.status == "delete"
-                      ? _c("div", [_vm._m(2), _vm._v(" "), _vm._m(3)])
-                      : _vm._e()
-                  ])
-                : _c("div", { staticClass: "modal-body" }, [
-                    _vm._m(4),
-                    _vm._v(" "),
-                    _vm._m(5)
-                  ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "modal-footer" }, [
-                _vm.successful
-                  ? _c("div", [
-                      _c(
-                        "button",
-                        {
-                          staticClass: "btn btn-primary",
-                          attrs: { type: "button", "data-bs-dismiss": "modal" }
-                        },
-                        [_vm._v("Accept")]
-                      )
-                    ])
-                  : _c("div", [
-                      _c(
-                        "button",
-                        {
-                          staticClass: "btn btn-primary",
-                          attrs: { type: "button", "data-bs-dismiss": "modal" }
-                        },
-                        [_vm._v("Cancel")]
-                      ),
-                      _vm._v(" "),
-                      _vm.status == "add"
-                        ? _c(
-                            "button",
-                            {
-                              staticClass: "btn btn-success",
-                              attrs: { type: "button" },
-                              on: { click: _vm.save }
-                            },
-                            [_vm._v("Record")]
-                          )
-                        : _vm.status == "edit"
-                        ? _c(
-                            "button",
-                            {
-                              staticClass: "btn btn-success",
-                              attrs: { type: "button" },
-                              on: { click: _vm.edit }
-                            },
-                            [_vm._v("Save changes")]
-                          )
-                        : _vm.status == "delete"
-                        ? _c(
-                            "button",
-                            {
-                              staticClass: "btn btn-danger",
-                              attrs: { type: "button" },
-                              on: { click: _vm.deleteItem }
-                            },
-                            [_vm._v("Delete")]
-                          )
-                        : _vm._e()
-                    ])
-              ])
-            ])
-          ])
-        ]
-      )
-    ])
+      ],
+      2
+    )
   ])
 }
 var staticRenderFns = [
@@ -20322,24 +20346,6 @@ var staticRenderFns = [
         _vm._v("CRUD WITH "),
         _c("span", { staticClass: "text-success" }, [_vm._v("VUEJS")])
       ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "col-12 col-md-8" }, [
-      _c("b", [_vm._v("Name: ")]),
-      _vm._v("sdsdsa"),
-      _c("br"),
-      _vm._v(" "),
-      _c("b", [_vm._v("Last name: ")]),
-      _vm._v("sadsad"),
-      _c("br"),
-      _vm._v(" "),
-      _c("b", [_vm._v("Email: ")]),
-      _vm._v("sdas"),
-      _c("br")
     ])
   },
   function() {
