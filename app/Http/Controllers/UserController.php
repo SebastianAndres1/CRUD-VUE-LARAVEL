@@ -30,22 +30,23 @@ class UserController extends Controller
         $rules = [
             'name'=>'required',
             'lastname'=>'required',
-            'email'=>'required|email',
+            'email'=>'required|email|unique:users',
+            'email.unique'=>'Email is not valid.',
         ];
         $response = [
-            'name.required'=>'name required.',
-            'lastname.required'=>'last name required.',
-            'email.required'=>'email required.',
-            'email.email'=>'email is not valid .',
+            'name.required'=>'Name is required.',
+            'lastname.required'=>'Last name is required.',
+            'email.required'=>'Email is required.',
+            'email.unique'=>'Email already registered.',
         ];
-        $validator = Validaror::make($request->all(),$rules,$response)->validate();
+        $validator = Validator::make($request->all(),$rules,$response)->validate();
 
         $user = new User;
         $user->name = e($request->input('name'));
         $user->lastname = e($request->input('lastname'));
         $user->email = e($request->input('email'));
         if($user->save()){
-            return 'update successful!!';
+            return $user;
         }
         
     }
@@ -73,21 +74,23 @@ class UserController extends Controller
         $rules = [
             'name'=>'required',
             'lastname'=>'required',
-            'email'=>'required|email',
+            'email'=>'required|email|unique:users'
         ];
         $response = [
-            'name.required'=>'name required.',
-            'lastname.required'=>'last name required.',
-            'email.required'=>'email required.',
-            'email.email'=>'email is not valid .',
+            'name.required'=>'Name is required.',
+            'lastname.required'=>'Last name is required.',
+            'email.required'=>'Email is required.',
+            'email.email'=>'Email is not valid.',
+            'email.unique'=>'Email already registered.'
         ];
-        $validator = Validaror::make($request->all(),$rules,$response)->validate();
+        
+        $validator = Validator::make($request->all(),$rules,$response)->validate();
         $user = User::find($id);
         $user->name = e($request->input('name'));
         $user->lastname = e($request->input('lastname'));
         $user->email = e($request->input('email'));
         if($user->save()){
-            return $user;
+            return 'update';
         }
     }
 
@@ -101,7 +104,7 @@ class UserController extends Controller
     {
         $user = User::find($id);
         if($user->delete()){
-            return 'delete successful!!';
+            return 'delete';
         }
     }
 }
